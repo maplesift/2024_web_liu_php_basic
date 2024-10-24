@@ -19,6 +19,11 @@
             text-align: center;
             border: 1px solid #999;
         }
+
+        .holiday {
+            color: red;
+
+        }
     </style>
 </head>
 
@@ -131,31 +136,35 @@ for ($i=0; $i<5 ; $i++) {
         <li>可以在特殊日期中顯示資訊(假日或紀念日)</li>
         <li>嘗試以block box或flex box的方式製作月曆</li>
     </ul>
-    <table>    
-    <tr>
-        <td></td>
-        <td>日</td>
-        <td>一</td>
-        <td>二</td>
-        <td>三</td>
-        <td>四</td>
-        <td>五</td>
-        <td>六</td>
-    </tr>
+    <table>
+        <tr>
+            <td></td>
+            <td>日</td>
+            <td>一</td>
+            <td>二</td>
+            <td>三</td>
+            <td>四</td>
+            <td>五</td>
+            <td>六</td>
+        </tr>
 
 
 
-    <?php
+        <?php
     $d=strtotime("2024-6");
-    for ($i=0; $i <6 ; $i++) { 
+    $firstDayWeek=date("w",strtotime(date("Y-m-1"))); // 內圈先設定日期 今月為2024-10-01
+    // 再使用strtotime把需要的日期換成秒 Unix 時間戳（從 1970 年 1 月 1 日開始的秒數）。
+    // 再用date "w" 來計算得到的時間戳 今月可得2 代表10/01為星期2
+    echo date("w");
+    for ($i=0; $i <6 ; $i++) { //直
         echo "<tr>";
         echo "<td>";
-        echo $i+1;
+        echo $i+1; //日期不可為0
         echo "</td>";
-        for ($j=0; $j <7 ; $j++) { 
+        for ($j=0; $j <7 ; $j++) { //橫
             echo "<td>";
-            $dayNum=$i*7+$j+1;
-            if($dayNum<=date('t')){
+            $dayNum=$i*7+$j+1 -$firstDayWeek; //第一周圍0*7+$j+1 "-$firstDayWeek來得到正確的10/1日期"
+            if($dayNum<=date('t') && $dayNum>0){ // t=指定月份的天数  // 今月為31 代表超過31和小於0不打印 
                 echo $dayNum;
             }
             // echo $i*7 + $j+1;
@@ -165,8 +174,9 @@ for ($i=0; $i<5 ; $i++) {
     }
     echo "</tr>";
     ?>
-</table>
-    
+
+    </table>
+
 </body>
 
 </html>
