@@ -6,25 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>日期</title>
     <style>
-        body {
-            font-size: 24px;
-        }
+    table{
+        border-collapse:collapse;
 
-        table {
-            border-collapse: collapse;
-        }
-
-        td {
-            padding: 5px 10px;
-            text-align: center;
-            border: 1px solid #999;
-        }
-
-        .holiday {
-            color: red;
-
-        }
-    </style>
+    }
+    td{
+        padding:5px 10px;
+        text-align: center;
+        border:1px solid #999;
+    }
+    .holiday{
+        background:pink;
+        color:#999;
+    }
+    .grey-text{
+        color:#999;
+    }
+    .today{
+        background:blue;
+        color:white;
+        font-weight:bolder;
+    }
+</style>
 </head>
 
 <body>
@@ -170,12 +173,61 @@ for ($i=0; $i<5 ; $i++) {
             // echo $i*7 + $j+1;
             echo "</td>";
         }
-        // echo
     }
     echo "</tr>";
     ?>
-
     </table>
+
+    <table>
+<tr>
+    <td></td>
+    <td>日</td>
+    <td>一</td>
+    <td>二</td>
+    <td>三</td>
+    <td>四</td>
+    <td>五</td>
+    <td>六</td>
+</tr>
+<?php 
+//用時間戳date函數做月曆
+
+$firstDay=date("Y-m-1");
+$firstDayTime=strtotime($firstDay);
+$firstDayWeek=date("w",strtotime(date("Y-m-1")));
+
+for($i=0;$i<6;$i++){
+    echo "<tr>";
+    echo "<td>";
+    echo $i+1;
+    echo "</td>";
+    for($j=0;$j<7;$j++){
+        //echo "<td class='holiday'>";
+        $cell=$i*7+$j -$firstDayWeek; // 取得需要打印日曆的日期
+        $theDayTime=strtotime("$cell days".$firstDay); 
+        // 把$cell得到的日期(天)加上$firstDay 讓函數strtotime運算 取得"時間戳"
+
+        //所需樣式css判斷
+        $theMonth=(date("m",$theDayTime)==date("m"))?'':'grey-text'; //
+        
+        // ? 和 : 是三元運算符的語法，這是一種簡化的 if-else 語句。
+        // =if (date("m", $theDayTime) == date("m")) {
+            // $theMonth = '';
+        // } else {
+        //     $theMonth = 'grey-text';
+        // }
+        $isToday=(date("Y-m-d",$theDayTime)==date("Y-m-d"))?'today':''; // 
+        $w=date("w",$theDayTime);
+        $isHoliday=($w==0 || $w==6)?'holiday':'';
+        
+        echo "<td class='$isHoliday $theMonth $isToday'>";
+        echo date("d",$theDayTime); //將時間戳丟進date函數運算 取得日曆天數 d=月份中的第几天，有补零的两位数字	01 到 31
+        echo "</td>";
+    }
+    echo "</tr>";
+}
+?>
+</table>
 
 </body>
 
